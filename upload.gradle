@@ -1,0 +1,21 @@
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: 'https://packages.aliyun.com/maven/repository/2143987-release-TP0WJq/') {
+                authentication(
+                        userName: '615c06589b9269d050df5031',
+                        password: 'vvXz(WrhTohf'
+                )
+            }
+            snapshotRepository(url: 'https://packages.aliyun.com/maven/repository/2143987-snapshot-k3BKoO/') {
+                authentication(
+                        userName: '615c06589b9269d050df5031',
+                        password: 'vvXz(WrhTohf'
+                )
+            }
+            pom.version = "${repo_version}"
+            pom.artifactId = "${artifactId}"
+            pom.groupId = "${repo_group}"
+        }
+    }
+}

@@ -1,0 +1,76 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+ext {
+    android = [
+            compileSdkVersion: 28,
+            targetSdkVersion : 28,
+            minSdkVersion    : 19,
+            buildToolsVersion: '30.0.3'
+    ]
+
+    androidX = [
+            appcompat        : '1.3.0',
+            recyclerview     : '1.1.0-alpha04',
+            multidex         : '2.0.1',
+            material         : '1.1.0-alpha06',
+            espresso         : '3.2.0-alpha03',
+            coordinatorlayout: '1.1.3',
+            lifecycle        : '2.2.0-alpha02',
+    ]
+    dependencies = [
+            arouterapi     : '1.5.0',
+            aroutercompiler: '1.2.2',
+            rxlifecycle    : '3.0.0',
+            glide          : '4.10.0',
+            rxjava2        : '2.2.8',
+            rxandroid      : '2.1.1',
+            wmslogger      : '1.0.1',
+            eventbus       : '3.1.1',
+            wmszxing       : '1.0.1',
+            smartrefresh   : '1.0.5.1',
+            wmstooglebutton: '1.0.2',
+            litepal        : '2.0.0',
+
+    ]
+}
+buildscript {
+    repositories {
+        google()
+        jcenter()
+    }
+    dependencies {
+        classpath "com.android.tools.build:gradle:4.1.2"
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+        maven { url "https://jitpack.io" }
+
+        maven {
+            url 'https://maven.aliyun.com/repository/public'
+        }
+        maven {
+            credentials {
+                username '615c06589b9269d050df5031'
+                password 'vvXz(WrhTohf'
+            }
+            url 'https://packages.aliyun.com/maven/repository/2143987-release-TP0WJq/'
+        }
+        maven {
+            credentials {
+                username '615c06589b9269d050df5031'
+                password 'vvXz(WrhTohf'
+            }
+            url 'https://packages.aliyun.com/maven/repository/2143987-snapshot-k3BKoO/'
+        }
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
