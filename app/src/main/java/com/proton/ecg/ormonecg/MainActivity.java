@@ -8,19 +8,12 @@ import android.widget.CompoundButton;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.google.gson.Gson;
 import com.proton.common.activity.base.BaseActivity;
 import com.proton.common.bean.CarePatchECGReport;
 import com.proton.common.bean.CarePatchUserInfo;
 import com.proton.common.bean.MessageEvent;
 import com.proton.common.bean.NSError;
 import com.proton.common.callback.CarePatchReportListener;
-import com.proton.common.utils.FileUtils;
-import com.proton.ecg.algorithm.bean.AlgorithmOutput;
-import com.proton.ecg.algorithm.callback.AlgorithmOutputListener;
-import com.proton.ecg.algorithm.interfaces.impl.EcgAlgorithm;
-import com.proton.ecg.algorithm.interfaces.impl.EcgCardAlgorithm;
-import com.proton.ecg.measure.bean.ReportJsonBean;
 import com.proton.ecg.omron.CarePatchECGCardKitManager;
 import com.proton.ecg.ormonecg.databinding.ActivityMainBinding;
 import com.proton.common.bean.ReportDbBean;
@@ -89,10 +82,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
                 }
             });
         });
-
-        binding.btnTest.setOnClickListener(v -> {
-            test();
-        });
         initListener();
     }
 
@@ -116,24 +105,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         });
     }
 
-    private void test() {
-        String sourceDataFromJson = FileUtils.getSourceDataFromJson();
-        ReportJsonBean reportJsonBean = new Gson().fromJson(sourceDataFromJson, ReportJsonBean.class);
-        float[] dataSourceArray = reportJsonBean.getDataSourceArray();
-        List<Float> ecgData = new ArrayList<>();
-        for (int i = 0; i < dataSourceArray.length; i++) {
-            ecgData.add(i, dataSourceArray[i]);
-        }
-        EcgAlgorithm ecgAlgorithm = new EcgCardAlgorithm(null);
-        int sample = 500;
-        Logger.w("sample==", sample, ",size:", ecgData.size(), ",sourData==", ecgData);
-        ecgAlgorithm.fetchAlgorithmOutputResult(ecgData, sample, new AlgorithmOutputListener() {
-            @Override
-            public void onResult(AlgorithmOutput resultData) {
-                Logger.w("resultData==", resultData.toString());
-            }
-        });
-    }
 
     @Override
     public void initView() {
