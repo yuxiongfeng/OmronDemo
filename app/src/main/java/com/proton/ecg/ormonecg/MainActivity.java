@@ -1,11 +1,15 @@
 package com.proton.ecg.ormonecg;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.proton.common.activity.base.BaseActivity;
@@ -14,16 +18,17 @@ import com.proton.common.bean.CarePatchUserInfo;
 import com.proton.common.bean.MessageEvent;
 import com.proton.common.bean.NSError;
 import com.proton.common.callback.CarePatchReportListener;
+import com.proton.common.db.ReportDBDao;
 import com.proton.ecg.omron.CarePatchECGCardKitManager;
 import com.proton.ecg.ormonecg.databinding.ActivityMainBinding;
 import com.proton.common.bean.ReportDbBean;
-import com.proton.report.db.ReportDBDao;
 import com.proton.report.utils.DateUtils;
 import com.proton.report.utils.ReportUtils;
 import com.wms.baseapp.utils.BlackToast;
 import com.wms.common.adapter.CommonViewHolder;
 import com.wms.common.adapter.recyclerview.CommonAdapter;
 import com.wms.common.adapter.recyclerview.OnItemClickListener;
+import com.wms.common.utils.DensityUtils;
 import com.wms.logger.Logger;
 
 import java.util.ArrayList;
@@ -31,6 +36,7 @@ import java.util.List;
 
 public class MainActivity extends BaseActivity<ActivityMainBinding> {
 
+    public static final int PERMISSION_CODE = 100;
     private List<ReportDbBean> reportList = new ArrayList<>();
     private CommonAdapter<ReportDbBean> adapter;
 
@@ -42,10 +48,13 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        PermissionUtils.getLocationPermission(this);
-        PermissionUtils.getReadAndWritePermission(this);
-        ReportDBDao.deleteAll();
-
+        int i = ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        int i1 = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+        if (i == PackageManager.PERMISSION_GRANTED && i1 == PackageManager.PERMISSION_GRANTED) {
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_FINE_LOCATION}, 100);
+        }
+//        ReportDBDao.deleteAll();
         binding.btnConnect.setOnClickListener(v -> {
             String name = binding.etName.getText().toString();
             String age = binding.etAge.getText().toString();
@@ -105,10 +114,10 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         });
     }
 
-
     @Override
     public void initView() {
         super.initView();
+        Logger.w("width:", DensityUtils.getScreenWidth(), " ,height:", DensityUtils.getScreenHeight());
         adapter = new CommonAdapter<ReportDbBean>(this, reportList, R.layout.item_report_layout) {
             @Override
             public void convert(CommonViewHolder holder, ReportDbBean reportDbBean) {
@@ -162,6 +171,16 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     @Override
     public void receiveEventBusMessage(MessageEvent message) {
         super.receiveEventBusMessage(message);
-        fetchReportList();
+        if (message.getType() == MessageEvent.Type.SAVE_REPORT) {
+            fetchReportList();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_CODE) {
+            int grantResult = grantResults[0];
+        }
     }
 }
