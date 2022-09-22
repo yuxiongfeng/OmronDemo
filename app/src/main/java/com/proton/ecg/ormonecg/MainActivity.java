@@ -54,7 +54,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         } else {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_FINE_LOCATION}, 100);
         }
-//        ReportDBDao.deleteAll();
+        ReportDBDao.deleteAll();
         binding.btnConnect.setOnClickListener(v -> {
             String name = binding.etName.getText().toString();
             String age = binding.etAge.getText().toString();
