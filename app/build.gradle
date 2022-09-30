@@ -3,15 +3,15 @@ plugins {
 }
 
 android {
-    compileSdkVersion 30
-    buildToolsVersion "30.0.3"
+    compileSdkVersion rootProject.ext.android.compileSdkVersion
+    buildToolsVersion rootProject.ext.android.buildToolsVersion
 
     defaultConfig {
         applicationId "com.proton.ecg.ormonecg"
-        minSdkVersion 19
-        targetSdkVersion 30
-        versionCode 6
-        versionName "1.0.7"
+        minSdkVersion rootProject.ext.android.minSdkVersion
+        targetSdkVersion rootProject.ext.android.targetSdkVersion
+        versionCode 13
+        versionName "1.1.3"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ndk {
@@ -19,10 +19,25 @@ android {
         }
     }
 
+    signingConfigs {
+        release {
+            storeFile file('omron.jks')
+            storePassword '123456'
+            keyAlias 'omronAlias'
+            keyPassword '123456'
+        }
+    }
+
     buildTypes {
         release {
-            minifyEnabled false
+            signingConfig signingConfigs.release
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            minifyEnabled true
+            signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
     compileOptions {
@@ -33,10 +48,11 @@ android {
     dataBinding {
         enabled = true
     }
+    ndkVersion '21.1.6352462'
 }
 
 dependencies {
-    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.appcompat:appcompat:1.3.1'
     implementation 'com.google.android.material:material:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
@@ -45,6 +61,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation 'com.orhanobut:logger:2.2.0'
     api 'com.alibaba:arouter-api:1.5.2'
-    implementation 'com.proton.ecg.omron:cardKit:1.0.8'
+    implementation 'com.proton.ecg.omron:cardKit:1.0.9'
+//    api project(':omron')
     implementation 'com.tencent.bugly:crashreport:latest.release'
 }

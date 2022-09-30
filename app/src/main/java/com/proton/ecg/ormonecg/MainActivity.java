@@ -35,7 +35,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends BaseActivity<ActivityMainBinding> {
-
     public static final int PERMISSION_CODE = 100;
     private List<ReportDbBean> reportList = new ArrayList<>();
     private CommonAdapter<ReportDbBean> adapter;
@@ -46,7 +45,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         int i = ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
         int i1 = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
@@ -54,7 +53,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         } else {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_FINE_LOCATION}, 100);
         }
-        ReportDBDao.deleteAll();
+        Logger.w("logPath:", this.getExternalFilesDir("log").getPath());
         binding.btnConnect.setOnClickListener(v -> {
             String name = binding.etName.getText().toString();
             String age = binding.etAge.getText().toString();
@@ -117,7 +116,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     @Override
     public void initView() {
         super.initView();
-        Logger.w("width:", DensityUtils.getScreenWidth(), " ,height:", DensityUtils.getScreenHeight());
         adapter = new CommonAdapter<ReportDbBean>(this, reportList, R.layout.item_report_layout) {
             @Override
             public void convert(CommonViewHolder holder, ReportDbBean reportDbBean) {
@@ -133,6 +131,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
                 ecgReport.setDuration((int) reportDbBean.getDuration());
                 ecgReport.setMemo(reportDbBean.getMemo());
                 ecgReport.setLabel(reportDbBean.getLabel());
+                ecgReport.setSampleRate(reportDbBean.getSampleRate());
                 ecgReport.setResult(ReportUtils.getAlgorithmByReportBean(reportDbBean));
                 ecgReport.setPdfFilePath(reportDbBean.getPdfFilePath());
                 ecgReport.setThumbnailFilePath(reportDbBean.getThumbnailFilePath());
@@ -164,7 +163,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
     }
 
