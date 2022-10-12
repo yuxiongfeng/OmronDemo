@@ -17,6 +17,7 @@ import com.proton.common.bean.CarePatchECGReport;
 import com.proton.common.bean.CarePatchUserInfo;
 import com.proton.common.bean.MessageEvent;
 import com.proton.common.bean.NSError;
+import com.proton.common.callback.CarePatchComplaintListener;
 import com.proton.common.callback.CarePatchReportListener;
 import com.proton.common.db.ReportDBDao;
 import com.proton.ecg.omron.CarePatchECGCardKitManager;
@@ -88,6 +89,12 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
                     Logger.w("onError:", error.toString());
                     BlackToast.show(error.getDescription());
                 }
+            }, new CarePatchComplaintListener() {
+                @Override
+                public void onComplaint(String label, String content) {
+                    //主诉症状回调接口
+                    Logger.w("实时测量label:", label, " ,content:", content);
+                }
             });
         });
         initListener();
@@ -135,7 +142,13 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
                 ecgReport.setResult(ReportUtils.getAlgorithmByReportBean(reportDbBean));
                 ecgReport.setPdfFilePath(reportDbBean.getPdfFilePath());
                 ecgReport.setThumbnailFilePath(reportDbBean.getThumbnailFilePath());
-                CarePatchECGCardKitManager.getInstance().showReport(ecgReport);
+                CarePatchECGCardKitManager.getInstance().showReport(ecgReport, new CarePatchComplaintListener() {
+                    @Override
+                    public void onComplaint(String label, String content) {
+                        //主诉症状回调接口
+                        Logger.w("历史记录label:", label, " ,content:", content);
+                    }
+                });
             }
 
             @Override
