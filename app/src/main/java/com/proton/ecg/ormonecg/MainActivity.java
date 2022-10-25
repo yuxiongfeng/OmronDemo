@@ -12,7 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.github.gzuliyujiang.wheelpicker.BirthdayPicker;
 import com.proton.common.activity.base.BaseActivity;
 import com.proton.common.bean.CarePatchECGReport;
 import com.proton.common.bean.CarePatchUserInfo;
@@ -30,7 +29,6 @@ import com.wms.baseapp.utils.BlackToast;
 import com.wms.common.adapter.CommonViewHolder;
 import com.wms.common.adapter.recyclerview.CommonAdapter;
 import com.wms.common.adapter.recyclerview.OnItemClickListener;
-import com.wms.common.utils.DensityUtils;
 import com.wms.logger.Logger;
 
 import java.util.ArrayList;

@@ -61,7 +61,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation 'com.orhanobut:logger:2.2.0'
     api 'com.alibaba:arouter-api:1.5.2'
-    implementation 'com.proton.ecg.omron:cardKit:1.1.1'
-//    api project(':omron')
+    implementation 'com.proton.ecg.omron:cardKit:1.1.2'
     implementation 'com.tencent.bugly:crashreport:latest.release'
 }
